@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Breast Cancer Detection</h1>
+<p>Enter the following features to predict if the tumor is malignant or benign:</p>
+
+<form id="predictionForm">
+    <label for="mean_radius">Mean Radius:</label>
+    <input type="text" id="mean_radius" name="mean_radius" required>
+
+    <label for="mean_texture">Mean Texture:</label>
+    <input type="text" id="mean_texture" name="mean_texture" required>
+
+    <label for="mean_perimeter">Mean Perimeter:</label>
+    <input type="text" id="mean_perimeter" name="mean_perimeter" required>
+
+    <label for="mean_area">Mean Area:</label>
+    <input type="text" id="mean_area" name="mean_area" required>
+
+    <label for="mean_smoothness">Mean Smoothness:</label>
+    <input type="text" id="mean_smoothness" name="mean_smoothness" required>
+
+    <button type="submit">Predict</button>
+</form>
+
+<p id="result"></p>
+
+<script>
+    document.getElementById('predictionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = {
+            mean_radius: parseFloat(formData.get('mean_radius')),
+            mean_texture: parseFloat(formData.get('mean_texture')),
+            mean_perimeter: parseFloat(formData.get('mean_perimeter')),
+            mean_area: parseFloat(formData.get('mean_area')),
+            mean_smoothness: parseFloat(formData.get('mean_smoothness'))
+        };
+
+        fetch('https://b1a6-34-23-154-94.ngrok-free.app/predict', {  // Updated URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result').innerText = 'Prediction: ' + data.prediction;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+
+</body>
+</html>
+
+
